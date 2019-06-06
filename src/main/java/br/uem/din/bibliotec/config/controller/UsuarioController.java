@@ -61,7 +61,14 @@ public class UsuarioController implements Serializable {
         if(retorno == 1){
             user.setMsg_autenticacao("Cadastrado com sucesso.");
         }else{
-            user.setMsg_autenticacao("Cadastro falhou.");
+            if(retorno == 0){
+                user.setMsg_autenticacao("Cadastro falhou.");
+            }else{
+                if(retorno == -1){
+                    user.setMsg_autenticacao("CPF inválido!");
+                }
+            }
+
         }
         return userDao.homePage();
     }
@@ -73,8 +80,15 @@ public class UsuarioController implements Serializable {
             user.setMsg_autenticacao("Retorno: O usuário '" + user.getNome() + "' foi cadastrado com sucesso!");
             user.setColor_msg(SUCESSO);
         }else{
-            user.setMsg_autenticacao("Retorno: Não foi possível cadastrar o usuário, tente novamente mais tarde.");
-            user.setColor_msg(FALHA);
+            if(retorno == 0){
+                user.setMsg_autenticacao("Retorno: Não foi possível cadastrar o usuário, tente novamente mais tarde.");
+                user.setColor_msg(FALHA);
+            }else{
+                if(retorno == -1){
+                    user.setMsg_autenticacao("Retorno: Não foi possível cadastrar o usuário, pois o CPF informado é inválido.");
+                    user.setColor_msg(FALHA);
+                }
+            }
         }
         return userDao.homePage();
     }
@@ -122,6 +136,11 @@ public class UsuarioController implements Serializable {
                 if(retorno == -1){
                     user.setMsg_autenticacao("Retorno: O usuário informado não existe, edição falhou.");
                     user.setColor_msg(FALHA);
+                }else{
+                    if(retorno == -2){
+                        user.setMsg_autenticacao("Retorno: A edição falhou, pois o CPF informado é inválido.");
+                        user.setColor_msg(FALHA);
+                    }
                 }
             }
         }
@@ -144,8 +163,15 @@ public class UsuarioController implements Serializable {
                 user.setMsg_autenticacao("Nenhuma alteração identificada!");
                 user.setColor_msg(FALHA);
             }else{
-                user.setMsg_autenticacao("Falha ao atualizar dados.");
-                user.setColor_msg(FALHA);
+                if(retorno == -1){
+                    user.setMsg_autenticacao("Falha ao atualizar dados.");
+                    user.setColor_msg(FALHA);
+                }else{
+                    if(retorno == -2){
+                        user.setMsg_autenticacao("CPF inválido!");
+                        user.setColor_msg(FALHA);
+                    }
+                }
             }
         }
 
