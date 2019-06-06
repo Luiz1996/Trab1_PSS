@@ -9,6 +9,8 @@ import br.uem.din.bibliotec.config.services.ValidData;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -636,6 +638,74 @@ public class UsuarioDao {
             return -1;
         } catch (NoSuchAlgorithmException e) {
             return -1;
+        }
+        return 1;
+    }
+
+    public int redefSenha(Usuario user) throws NoSuchAlgorithmException {
+        String senhaBd = cript.makeEncryptionMd5(user.getSenha().trim()).trim();
+
+        //removendo caracteres da inputMask
+        user.setCpf(user.getCpf().replace(".", ""));
+        user.setCpf(user.getCpf().replace("-", ""));
+
+        //validando se CPF é válido
+        validaCpf = validaDados.validCpf(user.getCpf().trim());
+        if(!validaCpf){
+            return -1;
+        }
+
+        try {
+            //realiza conexão com banco de dados
+            Conexao con = new Conexao();
+            con.conexao.setAutoCommit(true);
+            Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = null;
+
+            st.execute( "SELECT \n" +
+                            "    COALESCE(u.nome, '') as nome, COALESCE(u.ativo,0) as ativo, COALESCE(u.permissao,0) as permissao\n" +
+                            "FROM\n" +
+                            "    usuarios u\n" +
+                            "WHERE\n" +
+                            "    u.cpf = '" + user.getCpf().trim() + "'      AND\n" +
+                            "\tu.email = '" + user.getEmail().trim() + "' AND\n" +
+                            "    u.datanasc = '" + dtFormat.formatadorDatasMySQL(user.getDatanasc().trim()) + "';");
+
+            rs = st.getResultSet();
+
+            while(rs.next()){
+                user.setNome(rs.getString("nome").trim());
+                user.setAtivo(rs.getInt("ativo"));
+                user.setPermissao(rs.getInt("permissao"));
+            }
+
+            if(user.getNome().equals("".trim())){
+                return -4;
+            }
+
+            if(user.getAtivo() == 0){
+                return -2;
+            }
+
+            if(user.getPermissao() == 0){
+                return -3;
+            }
+
+            st.executeUpdate("update\n" +
+                                "\tusuarios u\n" +
+                                "set\n" +
+                                "\tu.senha = '" + senhaBd + "'\n" +
+                                "where\n" +
+                                "\tu.cpf = '" + user.getCpf().trim() + "' and\n" +
+                                "    u.email = '" + user.getEmail().trim() + "';");
+
+            //Enviando e-mail contendo nova senha
+            email.setAssunto("Redefinição de Senha - Biblioteca X");
+            email.setEmailDestinatario(user.getEmail().trim());
+            email.setMsg("Olá " + user.getNome() + ", <br><br>Sua senha foi redefinida com sucesso!<br><br>Nova Senha: <b>" + user.getSenha().trim() + "</b>.");
+            email.enviarGmail();
+        } catch (SQLException e) {
+            return 0;
         }
         return 1;
     }

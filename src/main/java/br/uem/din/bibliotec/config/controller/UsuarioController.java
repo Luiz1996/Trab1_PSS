@@ -7,6 +7,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.awt.*;
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -176,5 +177,35 @@ public class UsuarioController implements Serializable {
         }
 
         return userDao.homePage();
+    }
+
+    public String realizaRedefinirSenha() throws NoSuchAlgorithmException {
+        retorno = userDao.redefSenha(user);
+
+        if(retorno == 1){
+            user.setMsg_autenticacao("Senha redefinida com sucesso.");
+        }else{
+            if(retorno == 0){
+                user.setMsg_autenticacao("Erro ao redefinir senha.");
+            }else{
+                if(retorno == -1){
+                    user.setMsg_autenticacao("Falha - CPF informado é inválido.");
+                }else{
+                    if(retorno == -2){
+                        user.setMsg_autenticacao("Falha - Usuário inativo.");
+                    }else{
+                        if(retorno == -3){
+                            user.setMsg_autenticacao("Falha - Usuário sem permissões.");
+                        }else{
+                            if(retorno == -4){
+                                user.setMsg_autenticacao("Falha - Dados inválidos.");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return "/gestaoBibliotecas?faces-redirect=true";
     }
 }

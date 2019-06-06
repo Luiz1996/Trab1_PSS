@@ -168,3 +168,6 @@ ON COMPLETION PRESERVE
 DO
    update `bibliotec`.`livro` l set l.datares = null, l.usuariores = null where (l.datares < current_date());
 commit;   	
+
+SET GLOBAL event_scheduler  = 1;
+commit
