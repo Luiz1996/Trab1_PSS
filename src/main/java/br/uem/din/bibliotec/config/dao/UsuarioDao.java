@@ -5,6 +5,7 @@ import br.uem.din.bibliotec.config.model.Usuario;
 import br.uem.din.bibliotec.config.services.DataFormat;
 import br.uem.din.bibliotec.config.services.Email;
 import br.uem.din.bibliotec.config.services.EncryptionMd5;
+import br.uem.din.bibliotec.config.services.ValidData;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ public class UsuarioDao {
     private Email email = new Email();
     private DataFormat dtFormat =  new DataFormat();
     private EncryptionMd5 cript = new EncryptionMd5();
+    private ValidData validaDados = new ValidData();
+    private boolean validaCpf = false;
 
     //método que realiza a autenticação do usuário retornando a permissão correta do usuário
     public int buscaPermissao(Usuario user, String usuario, String senha) throws SQLException {
@@ -104,6 +107,12 @@ public class UsuarioDao {
             user.setRg(user.getRg().replace("-", ""));
             user.setCep(user.getCep().replace("-", ""));
 
+            //validando se CPF fornecido é válido
+            validaCpf = validaDados.validCpf(user.getCpf().trim());
+            if(!validaCpf){
+                return -1;
+            }
+
             //realizando a inserção do novo cadastro no banco de dados
             st.executeUpdate("INSERT INTO `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) VALUES ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '0');");
 
@@ -143,6 +152,11 @@ public class UsuarioDao {
             user.setCpf(user.getCpf().replace(".", ""));
             user.setCpf(user.getCpf().replace("-", ""));
 
+            //validando se CPF fornecido é válido
+            validaCpf = validaDados.validCpf(user.getCpf().trim());
+            if(!validaCpf){
+                return -1;
+            }
 
             //setando sigla dos estados com letras maiusculas
             user.setEstado(user.getEstado().toUpperCase());
@@ -324,6 +338,12 @@ public class UsuarioDao {
                 //corrigindo CPF
                 user.setCpf(user.getCpf().replace(".", ""));
                 user.setCpf(user.getCpf().replace("-", ""));
+
+                //validando se CPF fornecido é válido
+                validaCpf = validaDados.validCpf(user.getCpf().trim());
+                if(!validaCpf){
+                    return -2;
+                }
 
                 st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET cpf = '" + user.getCpf() + "' WHERE codusuario = " + user.getCodusuario() + ";");
             }
@@ -530,6 +550,12 @@ public class UsuarioDao {
                 //corrigindo CPF
                 user.setCpf(user.getCpf().replace(".", ""));
                 user.setCpf(user.getCpf().replace("-", ""));
+
+                //validando se CPF fornecido é válido
+                validaCpf = validaDados.validCpf(user.getCpf().trim());
+                if(!validaCpf){
+                    return -2;
+                }
 
                 st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET cpf = '" + user.getCpf() + "' WHERE usuario = '" + login + "';");
             }
