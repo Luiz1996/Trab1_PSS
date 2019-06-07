@@ -47,13 +47,13 @@
 
             .parteLogin {
                 position: absolute;
-                top: -80px;
+                top: -30px;
                 bottom: 0;
                 left: -1077px;
                 right: 0px;
                 margin: auto;
                 width: 280px;
-                height: 330px;
+                height: 380px;
                 border: darkgray 1px solid;
                 border-radius: 5px;
                 background: lightgray;
@@ -82,9 +82,20 @@
                 height: 30px;
             }
 
+            .redefSenha {
+                position: absolute;
+                top: 55px;
+                bottom: 0;
+                left: 0px;
+                right: 0px;
+                margin: auto;
+                width: 247px;
+                height: 30px;
+            }
+
             .login {
                 position: absolute;
-                top: 58px;
+                top: 120px;
                 bottom: 0;
                 left: 0px;
                 right: 0px;
@@ -95,7 +106,7 @@
 
             .cadastro {
                 position: absolute;
-                top: 150px;
+                top: 205px;
                 bottom: 0;
                 left: 0px;
                 right: 0px;
@@ -106,7 +117,7 @@
 
             .retorno {
                 position: absolute;
-                top: 245px;
+                top: 290px;
                 bottom: 0;
                 left: 0px;
                 right: 0px;
@@ -152,8 +163,6 @@
             <h:form id="telaLogin">
                 <h5 align="center">Acesso</h5><br></br>
                 <div class="usuario" id="usuario">
-
-
                     <h:outputLabel value="Usuário"/><br></br>
                     <p:inputText value="#{loginController.usuario}" class="form-control"
                                  placeholder="Username, CPF ou E-mail" maxlength="30"/>
@@ -180,13 +189,16 @@
                 </div>
                 #{loginController.login.msg_autenticacao = ''}
             </h:form>
+            <div class="redefSenha" id="redefSenha">
+                <a href="redefinirSenha.xhtml" >Esqueci minha senha</a>
+            </div>
         </div>
         <div id="imagem" class="imagem">
             <a href="http://www.bce.uem.br/" title="Novas aquisições da Biblioteca Central - UEM." target="_blank">
                 <img align="right" src="export/images/manchete.jpg" width="1070" height="475" alt="Banner UEM."/></a>
         </div>
         <div id="popup" class="popup">
-            <p>Bem vindo ao Sistema BiblioTec!
+            <p>Bem vindo a Biblioteca X!
                 <button class="fechar" onclick="fechar()">x</button>
                 <b></b>
                 <p>
@@ -198,7 +210,7 @@
                 </p>
                 <b></b>
                 <p>
-                    Caso não tenha um cadastro, poderá fazê-lo clicando em Cadastre-se.
+                    Caso não tenha um cadastro, poderá fazê-lo clicando em Cadastrar-se.
                 </p>
             </p>
         </div>
