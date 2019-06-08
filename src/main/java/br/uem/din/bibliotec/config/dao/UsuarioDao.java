@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UsuarioDao {
     private Email email = new Email();
@@ -85,7 +86,7 @@ public class UsuarioDao {
         return -2;
     }
 
-    public int cadastrarUsuario(Usuario user) {
+    /*public int cadastrarUsuario(Usuario user) {
         //ao realizar o cadastro, entende-se que o usuário ainda não está efetivamente ativo e com a devida permissão, o balconista que dirá qual a permissão do novo usuário
         user.setAtivo(0);
         user.setPermissao(0);
@@ -132,12 +133,9 @@ public class UsuarioDao {
             return 0;
         }
         return 1;
-    }
+    }*/
 
     public int cadastrarUsuarioBalconista(Usuario user) {
-        //ao realizar o cadastro, entende-se que o usuário ainda não está efetivamente ativo e com a devida permissão, o balconista que dirá qual a permissão do novo usuário
-        user.setAtivo(1);
-
         //convertendo a data para padrão do banco de dados
         user.setDatanasc(dtFormat.formatadorDatasMySQL(user.getDatanasc()));
 
@@ -164,7 +162,7 @@ public class UsuarioDao {
             user.setEstado(user.getEstado().toUpperCase());
 
             //realizando a inserção do novo cadastro no banco de dados
-            st.executeUpdate("insert into `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) values ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado().toUpperCase() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '1');");
+            st.executeUpdate("insert into `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) values ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado().toUpperCase() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '" + user.getJaativado() + "');");
 
             //enviando e-mail para confirma cadastramento de novo usuário.
             email.setAssunto("Confirmação de Cadastro - Biblioteca X");
@@ -556,22 +554,6 @@ public class UsuarioDao {
             con.conexao.setAutoCommit(true);
             Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            if (!user.getNome().equals("")) {
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET nome = '" + user.getNome() + "' WHERE usuario = '" + login + "';");
-            }
-
-            if (!user.getSenha().equals("")) {
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET senha = '" + cript.makeEncryptionMd5(user.getSenha()) + "' WHERE usuario = '" + login + "';");
-            }
-
-            if (!user.getRg().equals("")) {
-                //corrigindo RG
-                user.setRg(user.getRg().replace(".", ""));
-                user.setRg(user.getRg().replace("-", ""));
-
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET rg = '" + user.getRg() + "' WHERE usuario = '" + login + "';");
-            }
-
             if (!user.getCpf().equals("")) {
                 //corrigindo CPF
                 user.setCpf(user.getCpf().replace(".", ""));
@@ -584,6 +566,22 @@ public class UsuarioDao {
                 }
 
                 st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET cpf = '" + user.getCpf() + "' WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getNome().equals("")) {
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET dataalt = current_date() WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getSenha().equals("")) {
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET senha = '" + cript.makeEncryptionMd5(user.getSenha()) + "' WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getRg().equals("")) {
+                //corrigindo RG
+                user.setRg(user.getRg().replace(".", ""));
+                user.setRg(user.getRg().replace("-", ""));
+
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET rg = '" + user.getRg() + "' WHERE usuario = '" + login + "';");
             }
 
             if (!user.getEmail().equals("")) {
@@ -690,6 +688,11 @@ public class UsuarioDao {
         user.setCpf(user.getCpf().replace(".", ""));
         user.setCpf(user.getCpf().replace("-", ""));
 
+        //gerando nova senha randomicamente
+        UUID uuid = UUID.randomUUID();
+        String myRandom = uuid.toString();
+        user.setSenha(myRandom.substring(0,20));
+
         //validando se CPF é válido
         validaCpf = validaDados.validCpf(user.getCpf().trim());
         if(!validaCpf){
@@ -744,7 +747,7 @@ public class UsuarioDao {
             //Enviando e-mail contendo nova senha
             email.setAssunto("Redefinição de Senha - Biblioteca X");
             email.setEmailDestinatario(user.getEmail().trim());
-            email.setMsg("Olá " + user.getNome() + ", <br><br>Sua senha foi redefinida com sucesso!<br><br>Nova Senha: <b>" + user.getSenha().trim() + "</b>.");
+            email.setMsg("Olá " + user.getNome() + ", <br><br>Sua senha foi redefinida com sucesso!<br><br>Nova Senha: <b>" + user.getSenha().trim() + "</b>");
             email.enviarGmail();
         } catch (SQLException e) {
             return 0;

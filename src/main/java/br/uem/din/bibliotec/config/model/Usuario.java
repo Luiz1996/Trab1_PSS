@@ -26,6 +26,7 @@ public class Usuario implements Serializable {
     private String datacad = "";
     private String dataalt = "";
     private String datanasc = "";
+    private int    jaativado = 0;
 
     //contrutores e gets/sets
     public Usuario(String email, String usuario, String senha, String nome, String rg, String cpf, String endereco, String cep, String cidade, String estado, int permissao, int ativo, String msg_autenticacao, String color_msg) {
@@ -93,6 +94,30 @@ public class Usuario implements Serializable {
         this.datanasc = datanasc;
     }
 
+    public Usuario(String email, String usuario, String senha, String nome, String rg, String cpf, String endereco, String cep, String cidade, String estado, String msg_autenticacao, String color_msg, int permissao, int ativo, String status, String perfil, int codusuario, String datacad, String dataalt, String datanasc, int jaativado) {
+        this.email = email;
+        this.usuario = usuario;
+        this.senha = senha;
+        this.nome = nome;
+        this.rg = rg;
+        this.cpf = cpf;
+        this.endereco = endereco;
+        this.cep = cep;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.msg_autenticacao = msg_autenticacao;
+        this.color_msg = color_msg;
+        this.permissao = permissao;
+        this.ativo = ativo;
+        this.status = status;
+        this.perfil = perfil;
+        this.codusuario = codusuario;
+        this.datacad = datacad;
+        this.dataalt = dataalt;
+        this.datanasc = datanasc;
+        this.jaativado = jaativado;
+    }
+
     public Usuario(String nome, int codusuario, String cpf, String email, String rg, String datanasc) {
         this.nome = nome;
         this.codusuario = codusuario;
@@ -109,6 +134,10 @@ public class Usuario implements Serializable {
     public String getDatanasc() { return datanasc; }
 
     public void setDatanasc(String datanasc) { this.datanasc = datanasc; }
+
+    public int getJaativado() { return jaativado; }
+
+    public void setJaativado(int jaativado) { this.jaativado = jaativado; }
 
     public String getDatacad() { return datacad; }
 
@@ -202,24 +231,32 @@ public class Usuario implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return permissao == usuario.permissao &&
-                ativo == usuario.ativo &&
-                email.equals(usuario.email) &&
-                this.usuario.equals(usuario.usuario) &&
-                senha.equals(usuario.senha) &&
-                nome.equals(usuario.nome) &&
-                rg.equals(usuario.rg) &&
-                cpf.equals(usuario.cpf) &&
-                endereco.equals(usuario.endereco) &&
-                cep.equals(usuario.cep) &&
-                cidade.equals(usuario.cidade) &&
-                estado.equals(usuario.estado) &&
-                msg_autenticacao.equals(usuario.msg_autenticacao);
+        Usuario usuario1 = (Usuario) o;
+        return permissao == usuario1.permissao &&
+                ativo == usuario1.ativo &&
+                codusuario == usuario1.codusuario &&
+                jaativado == usuario1.jaativado &&
+                Objects.equals(email, usuario1.email) &&
+                Objects.equals(usuario, usuario1.usuario) &&
+                Objects.equals(senha, usuario1.senha) &&
+                Objects.equals(nome, usuario1.nome) &&
+                Objects.equals(rg, usuario1.rg) &&
+                Objects.equals(cpf, usuario1.cpf) &&
+                Objects.equals(endereco, usuario1.endereco) &&
+                Objects.equals(cep, usuario1.cep) &&
+                Objects.equals(cidade, usuario1.cidade) &&
+                Objects.equals(estado, usuario1.estado) &&
+                Objects.equals(msg_autenticacao, usuario1.msg_autenticacao) &&
+                Objects.equals(color_msg, usuario1.color_msg) &&
+                Objects.equals(status, usuario1.status) &&
+                Objects.equals(perfil, usuario1.perfil) &&
+                Objects.equals(datacad, usuario1.datacad) &&
+                Objects.equals(dataalt, usuario1.dataalt) &&
+                Objects.equals(datanasc, usuario1.datanasc);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(email, usuario, senha, nome, rg, cpf, endereco, cep, cidade, estado, permissao, ativo, msg_autenticacao);
+        return Objects.hash(email, usuario, senha, nome, rg, cpf, endereco, cep, cidade, estado, msg_autenticacao, color_msg, permissao, ativo, status, perfil, codusuario, datacad, dataalt, datanasc, jaativado);
     }
 }
