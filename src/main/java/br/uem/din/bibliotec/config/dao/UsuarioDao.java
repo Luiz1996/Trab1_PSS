@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class UsuarioDao {
     private Email email = new Email();
@@ -85,7 +86,7 @@ public class UsuarioDao {
         return -2;
     }
 
-    public int cadastrarUsuario(Usuario user) {
+    /*public int cadastrarUsuario(Usuario user) {
         //ao realizar o cadastro, entende-se que o usuário ainda não está efetivamente ativo e com a devida permissão, o balconista que dirá qual a permissão do novo usuário
         user.setAtivo(0);
         user.setPermissao(0);
@@ -132,12 +133,9 @@ public class UsuarioDao {
             return 0;
         }
         return 1;
-    }
+    }*/
 
     public int cadastrarUsuarioBalconista(Usuario user) {
-        //ao realizar o cadastro, entende-se que o usuário ainda não está efetivamente ativo e com a devida permissão, o balconista que dirá qual a permissão do novo usuário
-        user.setAtivo(1);
-
         //convertendo a data para padrão do banco de dados
         user.setDatanasc(dtFormat.formatadorDatasMySQL(user.getDatanasc()));
 
@@ -164,7 +162,7 @@ public class UsuarioDao {
             user.setEstado(user.getEstado().toUpperCase());
 
             //realizando a inserção do novo cadastro no banco de dados
-            st.executeUpdate("insert into `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) values ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado().toUpperCase() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '1');");
+            st.executeUpdate("insert into `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) values ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado().toUpperCase() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '" + user.getJaativado() + "');");
 
             //enviando e-mail para confirma cadastramento de novo usuário.
             email.setAssunto("Confirmação de Cadastro - Biblioteca X");
@@ -277,7 +275,6 @@ public class UsuarioDao {
 
     public int editarUsuario(Usuario user) {
         //declaração de varáveis locais que nos ajudará nas tratativas de erros
-        String nome_anterior = "";
         Integer codusuario = 0;
 
         try {
@@ -288,12 +285,11 @@ public class UsuarioDao {
 
             //realiza a consulta que vai nos auxiliar na tratativa de erros em caso de edição de usuário que não existe no banco de dados
             //ou seja, codusuario informado pelo usuário é inválido
-            st.execute("SELECT nome, codusuario FROM `bibliotec`.`usuarios` WHERE codusuario = " + user.getCodusuario() + ";");
+            st.execute("SELECT codusuario FROM `bibliotec`.`usuarios` WHERE codusuario = " + user.getCodusuario() + ";");
             ResultSet rs = st.getResultSet();
 
             //carrega as variáveis locais com os valores do resultSet
             while (rs.next()) {
-                nome_anterior = rs.getString("nome");
                 codusuario = rs.getInt("codusuario");
             }
 
@@ -403,11 +399,38 @@ public class UsuarioDao {
                     }
                     st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET ativo = '1', jaativado = '1' WHERE codusuario = " + user.getCodusuario() + ";");
 
+                    //Enviando e-mail com novos dados ou confirmando alterações cadastrais
                     if((!user.getUsuario().equals("") || !user.getSenha().equals(""))){
-                        //enviando e-mail com novos dados de acesso
-                        email.setAssunto("Alteração de Acessos - Biblioteca X");
+                        //quando altera apenas o username
+                        if(!user.getUsuario().equals("") && user.getSenha().equals("")){
+                            //enviando e-mail com novo username
+                            email.setAssunto("Alteração de Acessos - Biblioteca X");
+                            email.setEmailDestinatario(user.getEmail().trim());
+                            email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + usuario.trim() + "</i>.");
+                            email.enviarGmail();
+                        }else{
+                            //quando altera apenas a senha
+                            if(user.getUsuario().equals("") && !user.getSenha().equals("")){
+                                //enviando e-mail com nova senha
+                                email.setAssunto("Alteração de Acessos - Biblioteca X");
+                                email.setEmailDestinatario(user.getEmail().trim());
+                                email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + usuario.trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
+                                email.enviarGmail();
+                            }
+                            //quando altera username e senha
+                            else{
+                                //enviando e-mail com novo username e nova senha
+                                email.setAssunto("Alteração de Acessos - Biblioteca X");
+                                email.setEmailDestinatario(user.getEmail().trim());
+                                email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + usuario.trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
+                                email.enviarGmail();
+                            }
+                        }
+                    }else{
+                        //enviando e-mail confirmando alterações de dados
+                        email.setAssunto("Atualização Cadastral - Biblioteca X");
                         email.setEmailDestinatario(user.getEmail().trim());
-                        email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + usuario.trim() + "</i>.<br>Senha: <i>" + senha.trim() + "</i>.");
+                        email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.");
                         email.enviarGmail();
                     }
                 }
@@ -467,7 +490,6 @@ public class UsuarioDao {
                         dtFormat.formatadorDatasBrasil(rs.getString("datanasc")));
                 dados.add(user);
             }
-
             //fechando as conexões em aberto para evitar locks infinitos no banco de dados
             st.close();
             rs.close();
@@ -532,22 +554,6 @@ public class UsuarioDao {
             con.conexao.setAutoCommit(true);
             Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
-            if (!user.getNome().equals("")) {
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET nome = '" + user.getNome() + "' WHERE usuario = '" + login + "';");
-            }
-
-            if (!user.getSenha().equals("")) {
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET senha = '" + cript.makeEncryptionMd5(user.getSenha()) + "' WHERE usuario = '" + login + "';");
-            }
-
-            if (!user.getRg().equals("")) {
-                //corrigindo RG
-                user.setRg(user.getRg().replace(".", ""));
-                user.setRg(user.getRg().replace("-", ""));
-
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET rg = '" + user.getRg() + "' WHERE usuario = '" + login + "';");
-            }
-
             if (!user.getCpf().equals("")) {
                 //corrigindo CPF
                 user.setCpf(user.getCpf().replace(".", ""));
@@ -560,6 +566,22 @@ public class UsuarioDao {
                 }
 
                 st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET cpf = '" + user.getCpf() + "' WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getNome().equals("")) {
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET dataalt = current_date() WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getSenha().equals("")) {
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET senha = '" + cript.makeEncryptionMd5(user.getSenha()) + "' WHERE usuario = '" + login + "';");
+            }
+
+            if (!user.getRg().equals("")) {
+                //corrigindo RG
+                user.setRg(user.getRg().replace(".", ""));
+                user.setRg(user.getRg().replace("-", ""));
+
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET rg = '" + user.getRg() + "' WHERE usuario = '" + login + "';");
             }
 
             if (!user.getEmail().equals("")) {
@@ -597,7 +619,7 @@ public class UsuarioDao {
                 st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET dataalt = current_date() WHERE usuario = '" + login + "';");
 
                 //Enviando e-mail de alteração cadastral
-                st.execute("SELECT nome, email, usuario, senha FROM `bibliotec`.`usuarios` WHERE usuario = '" + login + "';");
+                st.execute("SELECT nome, email, usuario FROM `bibliotec`.`usuarios` WHERE usuario = '" + login + "';");
                 ResultSet rs = st.getResultSet();
 
                 String usuario = "";
@@ -605,21 +627,40 @@ public class UsuarioDao {
                     user.setNome(rs.getString("nome").trim());
                     user.setEmail(rs.getString("email").trim());
                     usuario = rs.getString("usuario").trim();
-                    user.setSenha(rs.getString("senha").trim());
                 }
 
                 //dependendo se foi alterado o username, é enviado um email diferente antes que a sessão do sistema seja invalidada
-                if(!user.getUsuario().equals("")){
-                    //Enviando e-mail de confirmação de atualização cadastral
-                    email.setAssunto("Atualização Cadastral - Biblioteca X");
-                    email.setEmailDestinatario(user.getEmail().trim());
-                    email.setMsg("Olá " + user.getNome() + ", <br><br>Seus dados foram atualizados com sucesso!<br><br>Username: <i>" + user.getUsuario().trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
-                    email.enviarGmail();
+                if(!user.getUsuario().equals("") || !user.getSenha().equals("")){
+                    //quando altera apenas o username
+                    if(!user.getUsuario().equals("") && user.getSenha().equals("")){
+                        //enviando e-mail com novo username
+                        email.setAssunto("Alteração de Acessos - Biblioteca X");
+                        email.setEmailDestinatario(user.getEmail().trim());
+                        email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + user.getUsuario().trim() + "</i>.");
+                        email.enviarGmail();
+                    }else{
+                        //quando altera apenas a senha
+                        if(user.getUsuario().equals("") && !user.getSenha().equals("")){
+                            //enviando e-mail com nova senha
+                            email.setAssunto("Alteração de Acessos - Biblioteca X");
+                            email.setEmailDestinatario(user.getEmail().trim());
+                            email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + usuario.trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
+                            email.enviarGmail();
+                        }
+                        //quando altera username e senha
+                        else{
+                            //enviando e-mail com novo username e nova senha
+                            email.setAssunto("Alteração de Acessos - Biblioteca X");
+                            email.setEmailDestinatario(user.getEmail().trim());
+                            email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Seus dados de acesso foram alterados com sucesso.<br><br>Username: <i>" + user.getUsuario().trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
+                            email.enviarGmail();
+                        }
+                    }
                 }else{
                     //Enviando e-mail de confirmação de atualização cadastral
                     email.setAssunto("Atualização Cadastral - Biblioteca X");
                     email.setEmailDestinatario(user.getEmail().trim());
-                    email.setMsg("Olá " + user.getNome() + ", <br><br>Seus dados foram atualizados com sucesso!<br><br>Username: <i>" + usuario.trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
+                    email.setMsg("Olá " + user.getNome() + ", <br><br>Seus dados foram atualizados com sucesso!");
                     email.enviarGmail();
                 }
             } else {
@@ -643,11 +684,14 @@ public class UsuarioDao {
     }
 
     public int redefSenha(Usuario user) throws NoSuchAlgorithmException {
-        String senhaBd = cript.makeEncryptionMd5(user.getSenha().trim()).trim();
-
         //removendo caracteres da inputMask
         user.setCpf(user.getCpf().replace(".", ""));
         user.setCpf(user.getCpf().replace("-", ""));
+
+        //gerando nova senha randomicamente
+        UUID uuid = UUID.randomUUID();
+        String myRandom = uuid.toString();
+        user.setSenha(myRandom.substring(0,20));
 
         //validando se CPF é válido
         validaCpf = validaDados.validCpf(user.getCpf().trim());
@@ -694,15 +738,16 @@ public class UsuarioDao {
             st.executeUpdate("update\n" +
                                 "\tusuarios u\n" +
                                 "set\n" +
-                                "\tu.senha = '" + senhaBd + "'\n" +
+                                "\tu.senha = '" + cript.makeEncryptionMd5(user.getSenha().trim()).trim() + "'\n" +
                                 "where\n" +
-                                "\tu.cpf = '" + user.getCpf().trim() + "' and\n" +
-                                "    u.email = '" + user.getEmail().trim() + "';");
+                                "    u.cpf = '" + user.getCpf().trim() + "'      AND\n" +
+                                "\tu.email = '" + user.getEmail().trim() + "' AND\n" +
+                                "    u.datanasc = '" + dtFormat.formatadorDatasMySQL(user.getDatanasc().trim()) + "';");
 
             //Enviando e-mail contendo nova senha
             email.setAssunto("Redefinição de Senha - Biblioteca X");
             email.setEmailDestinatario(user.getEmail().trim());
-            email.setMsg("Olá " + user.getNome() + ", <br><br>Sua senha foi redefinida com sucesso!<br><br>Nova Senha: <b>" + user.getSenha().trim() + "</b>.");
+            email.setMsg("Olá " + user.getNome() + ", <br><br>Sua senha foi redefinida com sucesso!<br><br>Nova Senha: <b>" + user.getSenha().trim() + "</b>");
             email.enviarGmail();
         } catch (SQLException e) {
             return 0;

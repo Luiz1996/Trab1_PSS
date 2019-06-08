@@ -63,6 +63,8 @@
     </script>
 </h:head>
 <h:body>
+    #{usuarioController.user.jaativado = '1'}
+    #{usuarioController.user.jaativado = 1}
     <div id="popup" class="popup">
         <p>Olá,
             <button class="fechaAjuda" onclick="fechar()">x</button>
@@ -115,11 +117,11 @@
 
                     <h:outputLabel value="RG"/><font color="red">*</font>
                     <p:inputMask class="form-control" value="#{usuarioController.user.rg}" mask="99.999.999-9" required="true"
-                                 placeholder="Insira o seu RG(somente números)" maxlength="12"/>
+                                 placeholder="Insira o seu RG" maxlength="12"/>
 
                     <h:outputLabel value="CPF"/><font color="red">*</font>
                     <p:inputMask class="form-control" value="#{usuarioController.user.cpf}" mask="999.999.999-99"
-                                 required="true" placeholder="Insira o seu CPF(somente números)" maxlength="14"/>
+                                 required="true" placeholder="Insira o seu CPF" maxlength="14"/>
 
                     <h:outputLabel value="Endereço"/><font color="red">*</font>
                     <p:inputText value="#{usuarioController.user.endereco}" class="form-control"
@@ -129,7 +131,7 @@
 
                     <h:outputLabel value="CEP"/><font color="red">*</font>
                     <p:inputMask class="form-control" value="#{usuarioController.user.cep}" mask="99999-999" required="true"
-                                 placeholder="Insira o CEP da sua rua(somente números)" maxlength="8"/>
+                                 placeholder="Insira o CEP da sua rua" maxlength="8"/>
 
                     <h:outputLabel value="Cidade"/><font color="red">*</font>
                     <p:inputText value="#{usuarioController.user.cidade}" class="form-control"
@@ -148,7 +150,7 @@
                     <p:inputMask class="form-control" value="#{usuarioController.user.datanasc}" mask="99/99/9999"
                                  required="true" placeholder="DD/MM/AAAA" maxlength="10"/>
 
-
+                    <br/>
                     <h:outputText value="Perfil de Usuário"/><font color="red">*</font>
                     <div align="left" class="form-group">
                         <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
@@ -156,6 +158,16 @@
                                 <f:selectItem itemLabel="Bibliotecário" itemValue='1'/>
                                 <f:selectItem itemLabel="Balconista" itemValue='2'/>
                                 <f:selectItem itemLabel="Aluno" itemValue='3'/>
+                            </p:selectOneButton>
+                        </h:panelGrid>
+                    </div>
+
+                    <h:outputText value="Status do Usuário"/><font color="red">*</font>
+                    <div align="left" class="form-group">
+                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                            <p:selectOneButton value="#{usuarioController.user.ativo}" required="true">
+                                <f:selectItem itemLabel="Ativar" itemValue='1'/>
+                                <f:selectItem itemLabel="Inativar" itemValue='0'/>
                             </p:selectOneButton>
                         </h:panelGrid>
                     </div>

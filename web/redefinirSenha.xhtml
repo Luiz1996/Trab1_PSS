@@ -9,17 +9,18 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous"></link>
     <title>Redefinir Senha | BiblioTec</title>
+    <link href="export/images/icone.png" rel="shortcut icon" type="image/x-png"></link>
     <meta charset="utf-8">
         <style>
             #geral {
                 position: fixed;
-                top: -100px;
+                top: 70px;
                 bottom: 0;
                 left: 0;
                 right: 0px;
                 margin: auto;
                 width: 400px;
-                height: 450px;
+                height: 370px;
                 padding: 0px;
                 border: solid 1pX black;
                 display: block;
@@ -27,7 +28,7 @@
 
             .dadosPreenchidos {
                 position: fixed;
-                top: -30px;
+                top: 235px;
                 bottom: 0;
                 left: 0;
                 right: 0px;
@@ -37,11 +38,55 @@
                 padding: 0px;
                 display: block;
             }
+
+            .popup {
+                position: fixed;
+                top: -100px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                width: 500px;
+                height: 135px;
+                padding: 15px;
+                border: solid 1pX black;
+                background: white;
+                display: none;
+            }
+
+            .fechar {
+                position: absolute;
+                top: -93px;
+                bottom: 0;
+                left: 0;
+                right: -460px;
+                margin: auto;
+                width: 25px;
+                height: 25px;
+                border: black 1px solid;
+                border-radius: 3px;
+                background: gray;
+                color: blue;
+            }
         </style>
     </meta>
-    <link href="export/images/icone.png" rel="shortcut icon" type="image/x-png"></link>
+
+    <script type="text/javascript">
+        function abrir() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        function fechar() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
 </h:head>
 <h:body>
+    <i><h1 align="center"> BiblioTec </h1></i>
+    <p:menubar style="align-items: center">
+        <p:menuitem value="INÍCIO" url="gestaoBibliotecas.xhtml"></p:menuitem>
+        <p:menuitem value="AJUDA?" url="javascript: abrir();"></p:menuitem>
+    </p:menubar>
     <div class="jumbotron" id="geral">
         <section class="row">
             <div class="dadosPreenchidos">
@@ -73,14 +118,6 @@
                                      placeholder="DD/MM/AAAA"
                                      maxlength="10"/>
                     </div>
-                    <div class="senha" id="senha">
-                        <h:outputLabel value="Nova Senha"/><font color="red">*</font><br></br>
-                        <p:password value="#{usuarioController.user.senha}"
-                                    class="form-control"
-                                    maxlength="30"
-                                    placeholder="Insira a nova senha"
-                                    required="true"/>
-                    </div>
                     <br/>
                     <div class="redefSenha" id="redefSenha">
                         <h:commandButton value="Redefinir Senha" 
@@ -90,6 +127,15 @@
                 </h:form>
             </div>
         </section>
+    </div>
+    <div id="popup" class="popup">
+        <p>Olá,
+            <button class="fechar" onclick="fechar()">x</button>
+            <b></b>
+            <p>
+                Para redefinir sua senha basta prencher corretamente o que se pede abaixo e clicar em <b>Redefinir Senha</b>.<br/> <u>Uma nova senha é gerada e enviada em seu e-mail.</u>
+            </p>
+        </p>
     </div>
 </h:body>
 </html>
