@@ -154,15 +154,15 @@ public class LivroDao {
             con.conexao.setAutoCommit(true);
 
             //validando se o livro possui alguma reserva ou empréstimos em vigor
-            st.execute( "select\n" +
-                            "    count(l.datares)   as ha_reserva,\n" +
-                            "    max(e.ativo)\t   as ha_emp\n" +
-                            "from\n" +
-                            "    livro      l\n" +
-                            "inner join\n" +
-                            "\temprestimo e on e.codlivro = l.codlivro\n" +
-                            "where\n" +
-                            "\tl.codlivro = '" + livro.getCodlivro() + "';");
+            st.execute( "SELECT \n" +
+                            "    COALESCE(l.usuariores, 0) AS ha_reserva,\n" +
+                            "    COALESCE(MAX(e.ativo),0) AS ha_emp\n" +
+                            "FROM\n" +
+                            "    livro l\n" +
+                            "LEFT JOIN\n" +
+                            "    emprestimo e ON e.codlivro = l.codlivro\n" +
+                            "WHERE\n" +
+                            "    l.codlivro = '" + livro.getCodlivro() + "';");
 
             ResultSet rs = st.getResultSet();
 
