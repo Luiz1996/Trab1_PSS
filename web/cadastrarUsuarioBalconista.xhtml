@@ -50,11 +50,7 @@
                 background: lightgray;
             }
 
-<<<<<<< HEAD
             .permissao{
-=======
-            .jaAtivado{
->>>>>>> 81279b16874b06dae5ad392273a2e5726acc693a
                 display: none;
             }
         </style>
@@ -71,16 +67,8 @@
     </script>
 </h:head>
 <h:body>
-<<<<<<< HEAD
     <div class="permissao">
     #{usuarioController.user.permissao = -1}
-=======
-    <div class="jaAtivado">
-    #{usuarioController.user.jaativado = '1'}
-    #{usuarioController.user.jaativado = 1}
-    #{usuarioController.user.ativo = '1'}
-    #{usuarioController.user.ativo = 1}
->>>>>>> 81279b16874b06dae5ad392273a2e5726acc693a
     </div>
     <div id="popup" class="popup">
         <p>Olá,
@@ -175,23 +163,10 @@
                                 <f:selectItem itemLabel="Bibliotecário" itemValue='1'/>
                                 <f:selectItem itemLabel="Balconista" itemValue='2'/>
                                 <f:selectItem itemLabel="Aluno" itemValue='3'/>
-<<<<<<< HEAD
                                 <f:selectItem itemLabel="Sem Permissão" itemValue='0'/>
-=======
                             </p:selectOneButton>
                         </h:panelGrid>
                     </div>
-
-                    <!--<h:outputText value="Status do Usuário"/><font color="red">*</font>
-                    <div align="left" class="form-group">
-                        <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                            <p:selectOneButton value="#{usuarioController.user.ativo}" required="true">
-                                <f:selectItem itemLabel="Ativar" itemValue='1'/>
-                                <f:selectItem itemLabel="Inativar" itemValue='0'/>
->>>>>>> 81279b16874b06dae5ad392273a2e5726acc693a
-                            </p:selectOneButton>
-                        </h:panelGrid>
-                    </div>-->
                 </div>
                 <div class="form-group">
                     <h:commandButton value="Enviar dados" class="btn btn-block btn-primary"
