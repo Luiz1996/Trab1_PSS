@@ -1,6 +1,5 @@
 package br.uem.din.bibliotec.config.controller;
 
-import br.uem.din.bibliotec.config.dao.AdapterUsuarioDao;
 import br.uem.din.bibliotec.config.dao.UsuarioDao;
 import br.uem.din.bibliotec.config.model.Usuario;
 
@@ -58,11 +57,12 @@ public class UsuarioController implements Serializable {
 
     //chama método de cadastramento de usuários no model
     public String realizarCadastroUsuario() throws SQLException, AWTException {
-        //retorno = userDao.cadastrarUsuario(user);
+        //cria usuário inativo e sem permissões
+        user.setAtivo(0);
+        user.setPermissao(0);
+        user.setJaativado(0);
 
-        //trecho onde está sendo usado o ADAPTER
-        AdapterUsuarioDao adapt = new AdapterUsuarioDao(user);
-        retorno = adapt.cadastrarUsuario();
+        retorno = userDao.cadastrarUsuario(user);
 
         if(retorno == 1){
             user.setMsg_autenticacao("Cadastrado com sucesso.");
@@ -76,27 +76,15 @@ public class UsuarioController implements Serializable {
             }
 
         }
-
         return userDao.homePage();
     }
 
     public String realizarCadastroUsuarioBalconista() throws SQLException, AWTException {
-        retorno = userDao.cadastrarUsuarioBalconista(user);
+        //cadastra usuário ativo e com permissões
+        user.setAtivo(1);
+        user.setJaativado(1);
 
-        /*if(retorno == 1){
-            user.setMsg_autenticacao("Retorno: O usuário '" + user.getNome() + "' foi cadastrado com sucesso!");
-            user.setColor_msg(SUCESSO);
-        }else{
-            if(retorno == 0){
-                user.setMsg_autenticacao("Retorno: Não foi possível cadastrar o usuário, tente novamente mais tarde.");
-                user.setColor_msg(FALHA);
-            }else{
-                if(retorno == -1){
-                    user.setMsg_autenticacao("Retorno: Não foi possível cadastrar o usuário, pois o CPF informado é inválido.");
-                    user.setColor_msg(FALHA);
-                }
-            }
-        }*/
+        retorno = userDao.cadastrarUsuario(user);
 
         if(retorno == 1){
             user.setMsg_autenticacao("Cadastrado com sucesso.");

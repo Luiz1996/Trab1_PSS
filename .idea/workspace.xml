@@ -10,29 +10,21 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/conexao/Conexao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/conexao/Conexao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/controller/UsuarioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/dao/UsuarioDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/dao/UsuarioDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/WEB-INF/classes/br/uem/din/bibliotec/config/model/Usuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/acessoBalconista.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/acessoBalconista.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/cadastrarUsuarioBalconista.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/cadastrarUsuarioBalconista.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/cadastroUsuario.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/cadastroUsuario.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/consultarAcervo.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/consultarAcervo.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/editarUsuario.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/editarUsuario.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/meusDados.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/meusDados.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/redefinirSenha.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/redefinirSenha.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/gestaoBibliotecas.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/BiblioTec.war/gestaoBibliotecas.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/model/Usuario.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/conexao/Conexao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/conexao/Conexao.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/controller/UsuarioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/dao/UsuarioDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/dao/UsuarioDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/br/uem/din/bibliotec/config/model/Usuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/acessoBalconista.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/acessoBalconista.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/cadastroUsuario.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/cadastroUsuario.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/consultarAcervo.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/consultarAcervo.xhtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/editarUsuario.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/editarUsuario.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/meusDados.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/meusDados.xhtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/redefinirSenha.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/redefinirSenha.xhtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/gestaoBibliotecas.xhtml" beforeDir="false" afterPath="$PROJECT_DIR$/web/gestaoBibliotecas.xhtml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -65,7 +57,7 @@
     <option name="isMigrated" value="true" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/conexao/Conexao.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -144,17 +136,17 @@
         <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/services/ValidData.java" />
         <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/services/EncryptionMd5.java" />
         <option value="$PROJECT_DIR$/web/cadastroUsuario.xhtml" />
-        <option value="$PROJECT_DIR$/web/editarUsuario.xhtml" />
         <option value="$PROJECT_DIR$/web/meusDados.xhtml" />
         <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/model/Usuario.java" />
-        <option value="$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml" />
         <option value="$PROJECT_DIR$/web/acessoBalconista.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.java" />
-        <option value="$PROJECT_DIR$/web/gestaoBibliotecas.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java" />
-        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java" />
         <option value="$PROJECT_DIR$/web/consultarAcervo.xhtml" />
         <option value="$PROJECT_DIR$/web/redefinirSenha.xhtml" />
+        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java" />
+        <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java" />
+        <option value="$PROJECT_DIR$/web/gestaoBibliotecas.xhtml" />
+        <option value="$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml" />
+        <option value="$PROJECT_DIR$/web/editarUsuario.xhtml" />
         <option value="$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/conexao/Conexao.java" />
       </list>
     </option>
@@ -196,7 +188,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -299,7 +291,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -541,7 +533,11 @@
       <workItem from="1559911138489" duration="710000" />
       <workItem from="1559921395130" duration="2699000" />
       <workItem from="1559948125159" duration="2233000" />
-      <workItem from="1560015184188" duration="217000" />
+      <workItem from="1560014983144" duration="1196000" />
+      <workItem from="1560016216076" duration="2757000" />
+      <workItem from="1560123935776" duration="2591000" />
+      <workItem from="1560208479376" duration="1968000" />
+      <workItem from="1560211225476" duration="256000" />
     </task>
     <task id="LOCAL-00001" summary="Segundo commit:&#10;-CRUD 100%&#10;-Mensagens de Retorno OK&#10;-Botões de fechar o ajuda OK&#10;-Adicionado segunda verificação ao deletar e alterar os registros...">
       <created>1555875240215</created>
@@ -743,7 +739,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="550984000" />
+    <option name="totallyTimeSpent" value="559752000" />
   </component>
   <component name="TodoView" selected-index="2">
     <todo-panel id="selected-file">
@@ -757,7 +753,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8" visible="true" weight="0.26096824" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8" visible="true" weight="0.27609682" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Persistence" order="3" sideWeight="0.2" side_tool="true" weight="0.20045386" />
@@ -828,7 +824,6 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/model/Livro.java" />
     <entry file="uml://JAVA/br.uem.din.bibliotec.config.model.M_Livro_DAO">
       <provider selected="true" editor-type-id="UmlEditorProvider">
         <state>
@@ -1035,13 +1030,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/EmprestimoDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="104" column="30" lean-forward="true" selection-start-line="104" selection-start-column="30" selection-end-line="104" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/acessoBibliotecario.xhtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="337">
@@ -1101,13 +1089,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/editarUsuario.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="321" column="91" lean-forward="true" selection-start-line="321" selection-start-column="24" selection-end-line="321" selection-end-column="91" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/model/Usuario.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-317">
@@ -1122,14 +1103,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="66" column="4" lean-forward="true" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.java" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1144,8 +1117,8 @@
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/web/WEB-INF/faces-config.xml">
-      <provider editor-type-id="com.intellij.jsf.yfilesGraph.editor.FacesNavigationFileEditorProvider" />
       <provider selected="true" editor-type-id="text-editor" />
+      <provider editor-type-id="com.intellij.jsf.yfilesGraph.editor.FacesNavigationFileEditorProvider" />
     </entry>
     <entry file="file://$PROJECT_DIR$/BiblioTec.iml">
       <provider selected="true" editor-type-id="text-editor">
@@ -1158,27 +1131,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
           <caret line="21" column="20" lean-forward="true" selection-start-line="21" selection-start-column="20" selection-end-line="21" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/web/gestaoBibliotecas.xhtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="153" column="8" selection-start-line="153" selection-start-column="8" selection-end-line="153" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="519">
-          <caret line="229" selection-start-line="229" selection-end-line="229" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="568" column="13" selection-start-line="568" selection-start-column="13" selection-end-line="568" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -1196,6 +1148,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/redefinirSenha.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="135" column="185" selection-start-line="135" selection-start-column="185" selection-end-line="135" selection-end-column="185" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web/consultarAcervo.xhtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
@@ -1203,10 +1162,53 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/web/redefinirSenha.xhtml">
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/EmprestimoDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="135" column="185" selection-start-line="135" selection-start-column="185" selection-end-line="135" selection-end-column="185" />
+        <state relative-caret-position="145">
+          <caret line="590" column="40" selection-start-line="590" selection-start-column="15" selection-end-line="590" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/AdapterUsuarioDao.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/controller/UsuarioController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="82" column="49" selection-start-line="82" selection-start-column="49" selection-end-line="82" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/gestaoBibliotecas.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="206" column="23" lean-forward="true" selection-start-line="206" selection-start-column="23" selection-end-line="206" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/cadastrarUsuarioBalconista.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="52" column="12" lean-forward="true" selection-start-line="52" selection-start-column="12" selection-end-line="54" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/editarUsuario.xhtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="85" lean-forward="true" selection-start-line="85" selection-end-line="85" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/dao/UsuarioDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="946">
+          <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/br/uem/din/bibliotec/config/conexao/Conexao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="12" column="24" selection-start-line="12" selection-start-column="24" selection-end-line="12" selection-end-column="24" />
         </state>
       </provider>
     </entry>
