@@ -153,6 +153,34 @@ public class LivroDao {
             Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             con.conexao.setAutoCommit(true);
 
+            //validando se o livro possui alguma reserva ou empréstimos em vigor
+            st.execute( "select\n" +
+                            "    count(l.datares)   as ha_reserva,\n" +
+                            "    max(e.ativo)\t   as ha_emp\n" +
+                            "from\n" +
+                            "    livro      l\n" +
+                            "inner join\n" +
+                            "\temprestimo e on e.codlivro = l.codlivro\n" +
+                            "where\n" +
+                            "\tl.codlivro = '" + livro.getCodlivro() + "';");
+
+            ResultSet rs = st.getResultSet();
+
+            int ha_reserva = 0, ha_emp = 0;
+            while(rs.next()){
+                ha_reserva = rs.getInt("ha_reserva");
+                ha_emp = rs.getInt("ha_emp");
+            }
+
+            //se possuir emprestimo ou reserva em vigor, a deleção é abortada
+            if(ha_reserva > 0){
+                return -1;
+            }
+
+            if(ha_emp > 0){
+                return -2;
+            }
+
             //executa a EXCLUSÃO LÓGICA do livro no banco de dados, ou seja, ativo recebe 0
             st.executeUpdate("UPDATE `bibliotec`.`livro` SET `ativo` = '0', dataalt = current_date(), disponibilidade = '0' WHERE (`codlivro` =" + livro.getCodlivro() + ");");
 

@@ -86,56 +86,7 @@ public class UsuarioDao {
         return -2;
     }
 
-    /*public int cadastrarUsuario(Usuario user) {
-        //ao realizar o cadastro, entende-se que o usuário ainda não está efetivamente ativo e com a devida permissão, o balconista que dirá qual a permissão do novo usuário
-        user.setAtivo(0);
-        user.setPermissao(0);
-
-        //convertendo a data para padrão do banco de dados
-        user.setDatanasc(dtFormat.formatadorDatasMySQL(user.getDatanasc()));
-
-        try {
-            //realizando conexão com banco de dados
-            Conexao con = new Conexao();
-            Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            con.conexao.setAutoCommit(true);
-
-            //setando sigla dos estados com letras maiusculas
-            user.setEstado(user.getEstado().toUpperCase());
-
-            //corrigindo CPF e RG
-            user.setCpf(user.getCpf().replace(".", ""));
-            user.setCpf(user.getCpf().replace("-", ""));
-            user.setRg(user.getRg().replace(".", ""));
-            user.setRg(user.getRg().replace("-", ""));
-            user.setCep(user.getCep().replace("-", ""));
-
-            //validando se CPF fornecido é válido
-            validaCpf = validaDados.validCpf(user.getCpf().trim());
-            if(!validaCpf){
-                return -1;
-            }
-
-            //realizando a inserção do novo cadastro no banco de dados
-            st.executeUpdate("INSERT INTO `bibliotec`.`usuarios` (`email`, `usuario`, `senha`, `nome`, `rg`, `cpf`, `endereco`, `cep`, `cidade`, `estado`, `permissao`, `ativo`, `datacad`, `datanasc`, `jaativado`) VALUES ('" + user.getEmail() + "', '" + user.getUsuario() + "', '" + cript.makeEncryptionMd5(user.getSenha().trim()) + "', '" + user.getNome() + "', '" + user.getRg() + "', '" + user.getCpf() + "', '" + user.getEndereco() + "', '" + user.getCep() + "', '" + user.getCidade() + "', '" + user.getEstado() + "', '" + user.getPermissao() + "', '" + user.getAtivo() + "', current_date(), '" + user.getDatanasc() + "', '0');");
-
-            //enviando e-mail para comunicar que recebemos os dados do usuário e em breve analisaremos suas informações e ativaremos seu cadastro
-            email.setAssunto("Recebemos seus Dados - Biblioteca X");
-            email.setEmailDestinatario(user.getEmail().trim());
-            email.setMsg("Olá " + user.getNome().trim() + ", <br><br>Recebemos seus dados em nosso sistema.<br><br>Eles serão analisados e caso não exista inconsistência(s) nos dados fornecidos seu cadastro será ativado.<br><br>Username: <i>" + user.getUsuario().trim() + "</i>.<br>Senha: <i>" + user.getSenha().trim() + "</i>.");
-            email.enviarGmail();
-
-            st.close();
-            con.conexao.close();
-        } catch (SQLException e) {
-            return 0;
-        } catch (NoSuchAlgorithmException e) {
-            return 0;
-        }
-        return 1;
-    }*/
-
-    public int cadastrarUsuarioBalconista(Usuario user) {
+    public int cadastrarUsuario(Usuario user) {
         //convertendo a data para padrão do banco de dados
         user.setDatanasc(dtFormat.formatadorDatasMySQL(user.getDatanasc()));
 
