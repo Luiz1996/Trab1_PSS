@@ -2,9 +2,8 @@ package br.uem.din.bibliotec.config.dao;
 
 import br.uem.din.bibliotec.config.conexao.Conexao;
 import br.uem.din.bibliotec.config.model.Livro;
-import br.uem.din.bibliotec.config.services.DataFormat;
+import br.uem.din.bibliotec.config.services.FormataData;
 import br.uem.din.bibliotec.config.services.Email;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class LivroDao {
     private Email email = new Email();
-    private DataFormat dtFormat =  new DataFormat();
+    private FormataData dtFormat =  new FormataData();
 
     //método de cadastramento de livro
     public int cadastrarLivro(Livro livro) throws SQLException {

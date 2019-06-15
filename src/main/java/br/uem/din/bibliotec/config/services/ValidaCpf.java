@@ -2,7 +2,7 @@ package br.uem.din.bibliotec.config.services;
 
 import java.util.InputMismatchException;
 
-public class ValidData {
+public class ValidaCpf {
 
     public boolean validCpf(String cpf) {
         // considera-se erro CPF's formados por uma sequencia de numeros iguais

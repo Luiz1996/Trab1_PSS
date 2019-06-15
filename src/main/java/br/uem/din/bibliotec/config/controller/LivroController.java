@@ -3,7 +3,6 @@ package br.uem.din.bibliotec.config.controller;
 import br.uem.din.bibliotec.config.dao.UsuarioDao;
 import br.uem.din.bibliotec.config.model.Livro;
 import br.uem.din.bibliotec.config.dao.LivroDao;
-import br.uem.din.bibliotec.config.services.DataFormat;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;

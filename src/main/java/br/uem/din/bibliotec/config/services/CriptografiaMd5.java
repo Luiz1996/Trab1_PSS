@@ -3,7 +3,7 @@ package br.uem.din.bibliotec.config.services;
 import java.security.*;
 import java.math.*;
 
-public class EncryptionMd5 {
+public class CriptografiaMd5 {
 
     public String makeEncryptionMd5(String Senha) throws NoSuchAlgorithmException {
         MessageDigest m = MessageDigest.getInstance("MD5");

@@ -1,9 +1,13 @@
 package br.uem.din.bibliotec.config.model;
 
+import br.uem.din.bibliotec.config.services.Email;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Usuario implements Serializable {
+public class Usuario implements Serializable, Observer {
+    Email sendEmail = new Email();
     public static final long serialVersionUID = 1L;
     //atributos dos usuarios
     private String email = "";
@@ -125,6 +129,12 @@ public class Usuario implements Serializable {
         this.email = email;
         this.rg = rg;
         this.datanasc = datanasc;
+    }
+
+    Observable book;
+    public Usuario(Observable livro){
+        this.book = livro;
+        book.addObserver(this);
     }
 
     public Usuario(){}
@@ -258,5 +268,18 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(email, usuario, senha, nome, rg, cpf, endereco, cep, cidade, estado, msg_autenticacao, color_msg, permissao, ativo, status, perfil, codusuario, datacad, dataalt, datanasc, jaativado);
+    }
+
+    //MÉTODO DO OBSERVER
+    @Override
+    public void update(Observable o, Object arg) {
+        //Enviando e-mail de confirmação de alteração na data de reserva
+        //Se o livro for devolvido antes da data de devolução, enntão a reserva do próximo usuário é adiantada também e é disparado e-mail
+        if (o instanceof Livro) {
+            sendEmail.setAssunto("Adiantamento de Reserva - Biblioteca X");
+            sendEmail.setEmailDestinatario(((Livro) o).getEmailUsuarioRes().trim());
+            sendEmail.setMsg("Olá " + ((Livro) o).getNomeUsuarioRes().trim() + ", <br><br> A sua reserva do livro <b>'" + ((Livro) o).getTitulo().trim() + "'</b> foi adiantada!<br>Nova data de retirada: <b>" + ((Livro) o).getDatares().trim() + "</b>.");
+            sendEmail.enviarGmail();
+        }
     }
 }

@@ -138,9 +138,13 @@ public class EmprestimoController implements Serializable {
                         emp.setColor_msg_retorno(FALHA);
                         emp.setMsg_retorno("Retorno: O livro já possui reserva, não foi possível alterar data de devolução.");
                     }else{
-                        //atualizando mensageria de retorno
-                        emp.setColor_msg_retorno(FALHA);
-                        emp.setMsg_retorno("Retorno: O livro já está reservado em nome de outra pessoa.");
+                        if(retorno == -3){
+                            emp.setColor_msg_retorno(FALHA);
+                            emp.setMsg_retorno("Retorno: O livro já está reservado em nome de outra pessoa.");
+                        }else{
+                            emp.setColor_msg_retorno(FALHA);
+                            emp.setMsg_retorno("Retorno: O novo usuário possui restrições, favor REGULARIZAR!");
+                        }
                     }
                 }
             }

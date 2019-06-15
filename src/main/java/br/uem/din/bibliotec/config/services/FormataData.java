@@ -2,7 +2,7 @@ package br.uem.din.bibliotec.config.services;
 
 import java.time.LocalDate;
 
-public class DataFormat {
+public class FormataData {
 
     //como o dado é informado como DD/MM/AAAA precisamos convertê-la para o formato do banco de dados
     public String formatadorDatasMySQL(String data) {
