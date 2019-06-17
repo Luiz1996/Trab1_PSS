@@ -2,29 +2,26 @@ package br.uem.din.bibliotec.config.dao;
 
 import br.uem.din.bibliotec.config.conexao.Conexao;
 import br.uem.din.bibliotec.config.model.Usuario;
-import br.uem.din.bibliotec.config.services.DataFormat;
-import br.uem.din.bibliotec.config.services.Email;
-import br.uem.din.bibliotec.config.services.EncryptionMd5;
-import br.uem.din.bibliotec.config.services.ValidData;
+import br.uem.din.bibliotec.config.services.*;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import java.math.BigInteger;
-import java.security.MessageDigest;
+import java.awt.*;
 import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class UsuarioDao {
     private Email email = new Email();
-    private DataFormat dtFormat =  new DataFormat();
-    private EncryptionMd5 cript = new EncryptionMd5();
-    private ValidData validaDados = new ValidData();
+    private FormataData dtFormat =  new FormataData();
+    private FormataCpf cpfFormat = new FormataCpf();
+    private FormataRg rgFormat = new FormataRg();
+    private CriptografiaMd5 cript = new CriptografiaMd5();
+    private ValidaCpf validaDados = new ValidaCpf();
     private boolean validaCpf = false;
 
     //método que realiza a autenticação do usuário retornando a permissão correta do usuário
@@ -159,8 +156,8 @@ public class UsuarioDao {
                     rs.getString("usuario"),
                     "",
                     rs.getString("nome"),
-                    rs.getString("rg"),
-                    rs.getString("cpf"),
+                    rgFormat.formataRg(rs.getString("rg")),
+                    cpfFormat.formataCpf(rs.getString("cpf")),
                     rs.getString("endereco"),
                     rs.getString("cep"),
                     rs.getString("cidade"),
@@ -197,6 +194,21 @@ public class UsuarioDao {
             Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             con.conexao.setAutoCommit(true);
 
+            //não pode deletar usuário se ele possuir emprestimos em vigor
+            if(verificarExistenciaEmps(user) > 0){
+                return -2;
+            }
+
+            //resetando todas as reservas (se existirem reservas para o usuário a ser deletado)
+            st.executeUpdate("update \n" +
+                                "\tlivro l\n" +
+                                "set\n" +
+                                "\tl.datares = null,\n" +
+                                "\tl.usuariores = null\n" +
+                                "where\n" +
+                                "\tl.ativo = '1' and\n" +
+                                "\tl.usuariores = '" + user.getCodusuario() + "';");
+
             st.execute("select nome, codusuario from `bibliotec`.`usuarios` where codusuario = " + user.getCodusuario() + ";");
             ResultSet rs = st.getResultSet();
 
@@ -208,6 +220,10 @@ public class UsuarioDao {
 
             if (codusuario == 0) {
                 return -1;
+            }
+
+            if(obterCodUsuario(user) == user.getCodusuario()){
+                return -3;
             }
 
             //executa a EXCLUSÃO LÓGICA do usuário no banco de dados, ou seja, ativo recebe 0 e permissao recebe 0 (isso impossibilitará o usuário de efetuar login)
@@ -222,6 +238,78 @@ public class UsuarioDao {
         } catch (SQLException e) {
             return 0;
         }
+    }
+
+    public int obterCodUsuario(Usuario user){
+        int codUser = 0;
+
+        try {
+            //abre conexão com banco de dados
+            Conexao con = new Conexao();
+            Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            con.conexao.setAutoCommit(true);
+            ResultSet rs = null;
+
+            //obtendo codusuario do usuario logado no sistema
+            HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+            String login = (String) session.getAttribute("usuario");
+
+            st.execute( "select\n" +
+                            "\tu.codusuario\n" +
+                            "from\n" +
+                            "\tusuarios u\n" +
+                            "where\n" +
+                            "\tu.ativo = '1' and\n" +
+                            "\tu.permissao <> '0' and\n" +
+                            "    u.usuario = '" + login.trim() + "';");
+
+            rs = st.getResultSet();
+
+            while(rs.next()){
+                codUser = rs.getInt("codusuario");
+            }
+
+            //fecha conexões para evitar lock nas tabelas do banco de dados
+            st.close();
+            rs.close();
+            con.conexao.close();
+        } catch (SQLException e) {
+            return codUser;
+        }
+        return codUser;
+    }
+
+    public int verificarExistenciaEmps(Usuario user){
+        int qtde_emp = 0;
+        try {
+            //realiza conexão com banco de dados
+            Conexao con = new Conexao();
+            con.conexao.setAutoCommit(true);
+            Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = null;
+
+            st.execute( "select\n" +
+                            "\tcount(coalesce(e.codemprestimo,0)) as qtde_emp\n" +
+                            "from\n" +
+                            "\temprestimo e\n" +
+                            "where\n" +
+                            "\te.ativo = '1' and\n" +
+                            "\te.codusuario = '" + user.getCodusuario() + "';");
+
+            rs = st.getResultSet();
+
+            while(rs.next()){
+                qtde_emp = rs.getInt("qtde_emp");
+            }
+
+            //fechando as conexões
+            st.close();
+            rs.close();
+            con.conexao.close();
+        } catch (SQLException e) {
+            return qtde_emp;
+        }
+        return qtde_emp;
     }
 
     public int editarUsuario(Usuario user) {
@@ -247,6 +335,11 @@ public class UsuarioDao {
             //valida se o código do usuário foi fornecido de forma incorreta, ou seja, usuário inexistente na base de dados
             if (codusuario == 0) {
                 return -1;
+            }
+
+            //verificando se o usuario logado esta tentando remover suas proprias permissões ou tentanto auto-deletar-se
+            if(obterCodUsuario(user) == user.getCodusuario() && (user.getAtivo() == 0 || user.getPermissao() == 0)){
+                return -3;
             }
 
             //este bloco realiza os updates apenas nos campos que foram preenchidos pelo balconista(campos deixados em branco não serão atualizados)
@@ -423,8 +516,8 @@ public class UsuarioDao {
                         rs.getString("usuario"),
                         rs.getString("senha"),
                         rs.getString("nome"),
-                        rs.getString("rg"),
-                        rs.getString("cpf"),
+                        rgFormat.formataRg(rs.getString("rg")),
+                        cpfFormat.formataCpf(rs.getString("cpf")),
                         rs.getString("endereco"),
                         rs.getString("cep"),
                         rs.getString("cidade"),
@@ -520,7 +613,7 @@ public class UsuarioDao {
             }
 
             if (!user.getNome().equals("")) {
-                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET dataalt = current_date() WHERE usuario = '" + login + "';");
+                st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET nome = '" + user.getNome().trim() + "' WHERE usuario = '" + login + "';");
             }
 
             if (!user.getSenha().equals("")) {
@@ -617,6 +710,8 @@ public class UsuarioDao {
             } else {
                 return 0;
             }
+
+            st.executeUpdate("UPDATE `bibliotec`.`usuarios` SET dataalt = current_date() WHERE usuario = '" + login + "';");
 
             //Se alterar o usuário logo a sessão será quebrada e será necessário refazer o login
             if (!user.getUsuario().equals("")) {

@@ -4,21 +4,24 @@ import br.uem.din.bibliotec.config.conexao.Conexao;
 import br.uem.din.bibliotec.config.model.Emprestimo;
 import br.uem.din.bibliotec.config.model.Livro;
 import br.uem.din.bibliotec.config.model.Usuario;
-import br.uem.din.bibliotec.config.services.DataFormat;
+import br.uem.din.bibliotec.config.services.FormataCpf;
+import br.uem.din.bibliotec.config.services.FormataData;
 import br.uem.din.bibliotec.config.services.Email;
+import br.uem.din.bibliotec.config.services.FormataRg;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EmprestimoDao {
     private Email email = new Email();
-    private DataFormat dtFormat = new DataFormat();
+    private FormataData dtFormat = new FormataData();
+    private FormataCpf cpfFormat = new FormataCpf();
+    private FormataRg rgFormat = new FormataRg();
 
     public List<Usuario> consultaUsuariosEmp() throws SQLException {
         List<Usuario> usuarios_emp = new ArrayList<Usuario>();
@@ -37,9 +40,9 @@ public class EmprestimoDao {
             Usuario usuario_temp = new Usuario(
                     rs.getString("nome"),
                     rs.getInt("codusuario"),
-                    rs.getString("cpf"),
+                    cpfFormat.formataCpf(rs.getString("cpf")),
                     rs.getString("email"),
-                    rs.getString("rg"),
+                    rgFormat.formataRg(rs.getString("rg")),
                     dtFormat.formatadorDatasBrasil(rs.getString("datanasc"))
             );
             usuarios_emp.add(usuario_temp);
@@ -143,7 +146,7 @@ public class EmprestimoDao {
                 //Enviando e-mail ao finalizar o cadastro de emprestimo
                 email.setAssunto("Empréstimo de Livro - Biblioteca X");
                 email.setEmailDestinatario(email_user_emp);
-                email.setMsg("Olá "+nome_user_emp+", <br><br>O empréstimo do livro <b>'"+titulo_book_emp+"'</b> foi realizado com sucesso! <br><br> Data do Empréstimo: <b>"+dataemp+"</b>. <br> Data da Devolução: <b>"+datadev+"</b>. <br><br>Fique atento à data de devolução.");
+                email.setMsg("Olá "+nome_user_emp+", <br><br>O empréstimo do livro <b>'"+titulo_book_emp+"'</b> foi realizado com sucesso! <br><br> Data do Empréstimo: <b>"+dataemp+"</b>. <br> Data da Devolução...: <b>"+datadev+"</b>. <br><br>Fique atento à data de devolução.");
                 email.enviarGmail();
             }else{
                 return 0;
@@ -353,8 +356,8 @@ public class EmprestimoDao {
                         rs.getString("editora"),
                         rs.getString("anolancamento"),
                         rs.getString("status"),
-                        rs.getString("rg"),
-                        rs.getString("cpf")
+                        rgFormat.formataRg(rs.getString("rg")),
+                        cpfFormat.formataCpf(rs.getString("cpf"))
                 );
                 emprestimos.add(empr);
             }
@@ -372,6 +375,9 @@ public class EmprestimoDao {
 
     public int finalizarEmprestimo(Emprestimo emp){
         String data_res = "";
+        Livro livroObserver = new Livro();
+        Usuario user= new Usuario(livroObserver);
+
         try{
             //realiza conexão com banco de dados bibliotec
             Conexao con = new Conexao();
@@ -411,12 +417,11 @@ public class EmprestimoDao {
 
             if(!data_res.trim().equals("")){
                 st.executeUpdate("UPDATE `bibliotec`.`livro` l SET l.datares = DATE_ADD(current_date(), INTERVAL 1 DAY) WHERE l.codlivro = '"+emp.getCodlivro()+"';");
-                String nome_res = "", email_res = "", datares = "";
+                String nome_res = "", email_res = "";
 
                 st.execute( "SELECT \n" +
                                 "    u.nome as nome, " +
-                                "    u.email as email, " +
-                                "    l.datares as datares\n" +
+                                "    u.email as email " +
                                 "FROM\n" +
                                 "    livro l\n" +
                                 "        LEFT JOIN\n" +
@@ -427,17 +432,9 @@ public class EmprestimoDao {
                 rs = st.getResultSet();
 
                 while(rs.next()){
-                    nome_res = rs.getString("nome");
-                    email_res = rs.getString("email");
-                    datares = dtFormat.formatadorDatasBrasil(rs.getString("datares"));
+                    user.setNome(rs.getString("nome"));
+                    user.setEmail(rs.getString("email"));
                 }
-
-                //Enviando e-mail de confirmação de alteração na data de reserva criada por outro usuário
-                //Se o livro for devolvido antes da data de devolução, enntão a reserva do próximo usuário é adiantada também e é disparado e-mail
-                email.setAssunto("Adiantamento de Reserva - Biblioteca X");
-                email.setEmailDestinatario(email_res);
-                email.setMsg("Olá "+nome_res+", <br><br>A sua reserva para o livro <b>'"+emp.getTitulo_book()+"'</b> foi adiantada para <b>"+datares+"</b>.");
-                email.enviarGmail();
             }
 
             //Enviando e-mail de confirmação ao devolver livro à biblioteca
@@ -445,6 +442,33 @@ public class EmprestimoDao {
             email.setEmailDestinatario(emp.getEmail_user());
             email.setMsg("Olá "+emp.getNome_user()+", <br><br>A devolução do livro <b>'"+emp.getTitulo_book()+"'</b> foi realizado com sucesso.");
             email.enviarGmail();
+
+            //TRECHO DE INÍCIO DO OBSERVER
+            st.execute( "select\n" +
+                            "    u.email,\n" +
+                            "    u.nome,\n" +
+                            "    l.datares,\n" +
+                            "    l.titulo,\n" +
+                            "    l.disponibilidade\n" +
+                            "from\n" +
+                            "\tlivro    l\n" +
+                            "inner join\n" +
+                            "\tusuarios u\ton u.codusuario = l.usuariores\n" +
+                            "where\n" +
+                            "\tl.codlivro = '" + emp.getCodlivro() + "';");
+
+
+
+            rs = st.getResultSet();
+
+            while(rs.next()){
+                livroObserver.setEmailUsuarioRes(rs.getString("email").trim());
+                livroObserver.setNomeUsuarioRes(rs.getString("nome").trim());
+                livroObserver.setDatares(dtFormat.formatadorDatasBrasil(rs.getString("datares")).trim());
+                livroObserver.setTitulo(rs.getString("titulo").trim());
+                livroObserver.setNovaDisp(rs.getString("disponibilidade").trim());
+            }
+            //FIM DO TRECHO DO OBSERVER
 
             //fechando conexões
             st.close();
@@ -527,6 +551,10 @@ public class EmprestimoDao {
 
             //TRATANDO A ALTERAÇÃO DO CODUSUARIO
             if(emp.getCodusuario()!=0){
+                //verificando se o novo usuario do emprestimo possui restrições/pendências
+                if(consultarEmpAtrasados(emp.getCodusuario()) > 0){
+                    return -4;
+                }
                 st.executeUpdate("UPDATE `bibliotec`.`emprestimo` e SET e.codusuario = '"+emp.getCodusuario()+"', e.dataalt = current_date() WHERE e.codemprestimo = '"+emp.getCodemprestimo()+"';");
             }
 
@@ -637,15 +665,15 @@ public class EmprestimoDao {
             ResultSet rs = null;
 
             st.execute( "select\n" +
-                    "\tcount(coalesce(e.codemprestimo,0)) as qtde\n" +
-                    "from\n" +
-                    "\temprestimo e\n" +
-                    "inner join\n" +
-                    "\tusuarios   u on u.codusuario = e.codusuario\t\n" +
-                    "where\n" +
-                    "\te.ativo = '1' and\n" +
-                    "    e.datadev < current_date() and\n" +
-                    "    u.codusuario = '" + codusuario + "';");
+                            "\tcount(coalesce(e.codemprestimo,0)) as qtde\n" +
+                            "from\n" +
+                            "\temprestimo e\n" +
+                            "inner join\n" +
+                            "\tusuarios   u on u.codusuario = e.codusuario\t\n" +
+                            "where\n" +
+                            "\te.ativo = '1' and\n" +
+                            "    e.datadev < current_date() and\n" +
+                            "    u.codusuario = '" + codusuario + "';");
 
             rs = st.getResultSet();
             while(rs.next()){

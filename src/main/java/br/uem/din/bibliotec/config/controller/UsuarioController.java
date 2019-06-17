@@ -125,8 +125,18 @@ public class UsuarioController implements Serializable {
                 user.setMsg_autenticacao("Retorno: A deleção do usuário falhou, contacte o administrador do sistema.");
                 user.setColor_msg(FALHA);
             }else{
-                user.setMsg_autenticacao("Retorno: O usuário informado não existe.");
-                user.setColor_msg(FALHA);
+                if(retorno == -1){
+                    user.setMsg_autenticacao("Retorno: O usuário informado não existe.");
+                    user.setColor_msg(FALHA);
+                }else{
+                    if(retorno == -2){
+                        user.setMsg_autenticacao("Retorno: O usuário possui empréstimos em vigor. Falha na deleção!");
+                        user.setColor_msg(FALHA);
+                    }else{
+                        user.setMsg_autenticacao("Retorno: O usuário não pode auto-deletar-se.");
+                        user.setColor_msg(FALHA);
+                    }
+                }
             }
         }
         return userDao.homePage();
@@ -150,6 +160,9 @@ public class UsuarioController implements Serializable {
                 }else{
                     if(retorno == -2){
                         user.setMsg_autenticacao("Retorno: A edição falhou, pois o CPF informado é inválido.");
+                        user.setColor_msg(FALHA);
+                    }else{
+                        user.setMsg_autenticacao("Retorno: A edição falhou, pois não pode auto-deletar-se e/ou remover suas permissões!");
                         user.setColor_msg(FALHA);
                     }
                 }

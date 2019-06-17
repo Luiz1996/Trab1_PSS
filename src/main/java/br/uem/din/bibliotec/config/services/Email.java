@@ -5,7 +5,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-
 public class Email {
     private String emailDestinatario;
     private String assunto;
@@ -35,8 +34,7 @@ public class Email {
         this.msg = msg;
     }
 
-    public boolean enviarGmail() {
-        boolean retorno = false;
+    public void enviarGmail() {
         //Get the session object
         Properties props = new Properties();
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -51,7 +49,6 @@ public class Email {
                         return new PasswordAuthentication("bibliotecsgb@gmail.com", "Efz4641O");
                     }
                 });
-
         try {
             MimeMessage message = new MimeMessage(s);
             message.setFrom(new InternetAddress("bibliotecsgb@gmail.com"));
@@ -62,12 +59,8 @@ public class Email {
 
             //send message
             Transport.send(message);
-
-            retorno = true;
         } catch (MessagingException e) {
-            retorno = false;
             e.printStackTrace();
         }
-        return retorno;
     }
 }

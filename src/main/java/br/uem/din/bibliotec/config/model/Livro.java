@@ -1,8 +1,10 @@
 package br.uem.din.bibliotec.config.model;
 
 import java.util.Objects;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Livro {
+public class Livro extends Observable{
     //declaracao dos atributos do livro
     private Integer codlivro = 0;
     private String codcatalogacao = "";
@@ -22,11 +24,17 @@ public class Livro {
     private String disponibilidade = "";
     private String datares = "";
     private int usuariores = 0;
+    private String nomeUsuarioRes = "";
+    private String emailUsuarioRes = "";
 
     //contrutores e gets/sets
     public Livro(String datares, int usuariores) {
         this.datares = datares;
         this.usuariores = usuariores;
+    }
+
+    public Livro(){
+
     }
 
     public Livro(Integer codlivro, String codcatalogacao, String numchamada, String titulo, String autor, String editora, String anolancamento, String cidade, Integer volume, Integer ativo) {
@@ -98,6 +106,26 @@ public class Livro {
         this.codcatalogacao = codcatalogacao;
     }
 
+    public Livro(String disponibilidade){
+        this.disponibilidade = disponibilidade;
+    }
+
+    public void setNovaDisp(String disponibilidade) {
+        if(disponibilidade.equals("1".trim())){
+            this.disponibilidade = disponibilidade;
+            setChanged();
+            notifyObservers();
+        }
+    }
+
+    public String getEmailUsuarioRes() { return emailUsuarioRes; }
+
+    public void setEmailUsuarioRes(String emailUsuarioRes) { this.emailUsuarioRes = emailUsuarioRes; }
+
+    public String getNomeUsuarioRes() { return nomeUsuarioRes; }
+
+    public void setNomeUsuarioRes(String nomeUsuarioRes) { this.nomeUsuarioRes = nomeUsuarioRes; }
+
     public String getDatares() { return datares; }
 
     public void setDatares(String datares) { this.datares = datares; }
@@ -106,7 +134,7 @@ public class Livro {
 
     public void setUsuariores(int usuariores) { this.usuariores = usuariores; }
 
-    public String getDisponibilidade() { return disponibilidade; }
+    public String getDisponibilidade() { return this.disponibilidade; }
 
     public void setDisponibilidade(String disponibilidade) { this.disponibilidade = disponibilidade; }
 
@@ -120,17 +148,11 @@ public class Livro {
 
     public void setDataalt(String dataalt) { this.dataalt = dataalt; }
 
-    public String getColor_msg_retorno() {
-        return color_msg_retorno;
-    }
+    public String getColor_msg_retorno() { return color_msg_retorno; }
 
-    public void setColor_msg_retorno(String color_msg_retorno) {
-        this.color_msg_retorno = color_msg_retorno;
-    }
+    public void setColor_msg_retorno(String color_msg_retorno) { this.color_msg_retorno = color_msg_retorno; }
 
-    public String getMsg_retorno() {
-        return msg_retorno;
-    }
+    public String getMsg_retorno() { return msg_retorno; }
 
     public void setMsg_retorno(String msg_retorno) { this.msg_retorno = msg_retorno; }
 
@@ -138,77 +160,41 @@ public class Livro {
 
     public void setStatus(String status) { this.status = status; }
 
-    public Integer getCodlivro() {
-        return codlivro;
-    }
+    public Integer getCodlivro() { return codlivro; }
 
-    public void setCodlivro(Integer codlivro) {
-        this.codlivro = codlivro;
-    }
+    public void setCodlivro(Integer codlivro) { this.codlivro = codlivro; }
 
-    public String getCodcatalogacao() {
-        return codcatalogacao;
-    }
+    public String getCodcatalogacao() { return codcatalogacao; }
 
-    public void setCodcatalogacao(String codcatalogacao) {
-        this.codcatalogacao = codcatalogacao;
-    }
+    public void setCodcatalogacao(String codcatalogacao) { this.codcatalogacao = codcatalogacao; }
 
-    public String getNumchamada() {
-        return numchamada;
-    }
+    public String getNumchamada() { return numchamada; }
 
-    public void setNumchamada(String numchamada) {
-        this.numchamada = numchamada;
-    }
+    public void setNumchamada(String numchamada) { this.numchamada = numchamada; }
 
-    public String getTitulo() {
-        return titulo;
-    }
+    public String getTitulo() { return titulo; }
 
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
+    public void setTitulo(String titulo) { this.titulo = titulo; }
 
-    public String getAutor() {
-        return autor;
-    }
+    public String getAutor() { return autor; }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
-    }
+    public void setAutor(String autor) { this.autor = autor; }
 
-    public String getEditora() {
-        return editora;
-    }
+    public String getEditora() { return editora; }
 
-    public void setEditora(String editora) {
-        this.editora = editora;
-    }
+    public void setEditora(String editora) { this.editora = editora; }
 
-    public String getAnolancamento() {
-        return anolancamento;
-    }
+    public String getAnolancamento() { return anolancamento; }
 
-    public void setAnolancamento(String anolancamento) {
-        this.anolancamento = anolancamento;
-    }
+    public void setAnolancamento(String anolancamento) { this.anolancamento = anolancamento; }
 
-    public String getCidade() {
-        return cidade;
-    }
+    public String getCidade() { return cidade; }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
+    public void setCidade(String cidade) { this.cidade = cidade; }
 
-    public Integer getVolume() {
-        return volume;
-    }
+    public Integer getVolume() { return volume; }
 
-    public void setVolume(Integer volume) {
-        this.volume = volume;
-    }
+    public void setVolume(Integer volume) { this.volume = volume; }
 
     public Integer getAtivo() { return ativo; }
 
@@ -220,20 +206,30 @@ public class Livro {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Livro livro = (Livro) o;
-        return codlivro.equals(livro.codlivro) &&
-                codcatalogacao.equals(livro.codcatalogacao) &&
-                numchamada.equals(livro.numchamada) &&
-                titulo.equals(livro.titulo) &&
-                autor.equals(livro.autor) &&
-                editora.equals(livro.editora) &&
-                anolancamento.equals(livro.anolancamento) &&
-                cidade.equals(livro.cidade) &&
-                volume.equals(livro.volume) &&
-                ativo.equals(livro.ativo);
+        return usuariores == livro.usuariores &&
+                Objects.equals(codlivro, livro.codlivro) &&
+                Objects.equals(codcatalogacao, livro.codcatalogacao) &&
+                Objects.equals(numchamada, livro.numchamada) &&
+                Objects.equals(titulo, livro.titulo) &&
+                Objects.equals(autor, livro.autor) &&
+                Objects.equals(editora, livro.editora) &&
+                Objects.equals(anolancamento, livro.anolancamento) &&
+                Objects.equals(cidade, livro.cidade) &&
+                Objects.equals(volume, livro.volume) &&
+                Objects.equals(ativo, livro.ativo) &&
+                Objects.equals(status, livro.status) &&
+                Objects.equals(msg_retorno, livro.msg_retorno) &&
+                Objects.equals(color_msg_retorno, livro.color_msg_retorno) &&
+                Objects.equals(datacad, livro.datacad) &&
+                Objects.equals(dataalt, livro.dataalt) &&
+                Objects.equals(disponibilidade, livro.disponibilidade) &&
+                Objects.equals(datares, livro.datares) &&
+                Objects.equals(nomeUsuarioRes, livro.nomeUsuarioRes) &&
+                Objects.equals(emailUsuarioRes, livro.emailUsuarioRes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codlivro, codcatalogacao, numchamada, titulo, autor, editora, anolancamento, cidade, volume, ativo);
+        return Objects.hash(codlivro, codcatalogacao, numchamada, titulo, autor, editora, anolancamento, cidade, volume, ativo, status, msg_retorno, color_msg_retorno, datacad, dataalt, disponibilidade, datares, usuariores, nomeUsuarioRes, emailUsuarioRes);
     }
 }

@@ -3,7 +3,6 @@ package br.uem.din.bibliotec.config.controller;
 import br.uem.din.bibliotec.config.dao.UsuarioDao;
 import br.uem.din.bibliotec.config.model.Livro;
 import br.uem.din.bibliotec.config.dao.LivroDao;
-import br.uem.din.bibliotec.config.services.DataFormat;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -91,8 +90,20 @@ public class LivroController implements Serializable {
             livro.setMsg_retorno("Retorno: A deleção do livro falhou.");
             livro.setColor_msg_retorno(FALHA);
         }else{
-            livro.setMsg_retorno("Retorno: O livro foi deletado com sucesso.");
-            livro.setColor_msg_retorno(SUCESSO);
+            if(retorno == 1){
+                livro.setMsg_retorno("Retorno: O livro foi deletado com sucesso.");
+                livro.setColor_msg_retorno(SUCESSO);
+            }else{
+                if(retorno == -1){
+                    livro.setMsg_retorno("Retorno: O livro possui reserva, deleção falhou.");
+                    livro.setColor_msg_retorno(FALHA);
+                }else{
+                    if(retorno == -2){
+                        livro.setMsg_retorno("Retorno: O livro possui empréstimos, deleção falhou.");
+                        livro.setColor_msg_retorno(FALHA);
+                    }
+                }
+            }
         }
         return userDao.homePage();
     }

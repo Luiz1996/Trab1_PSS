@@ -2,9 +2,8 @@ package br.uem.din.bibliotec.config.dao;
 
 import br.uem.din.bibliotec.config.conexao.Conexao;
 import br.uem.din.bibliotec.config.model.Livro;
-import br.uem.din.bibliotec.config.services.DataFormat;
+import br.uem.din.bibliotec.config.services.FormataData;
 import br.uem.din.bibliotec.config.services.Email;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class LivroDao {
     private Email email = new Email();
-    private DataFormat dtFormat =  new DataFormat();
+    private FormataData dtFormat =  new FormataData();
 
     //método de cadastramento de livro
     public int cadastrarLivro(Livro livro) throws SQLException {
@@ -152,6 +151,34 @@ public class LivroDao {
             Conexao con = new Conexao();
             Statement st = con.conexao.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             con.conexao.setAutoCommit(true);
+
+            //validando se o livro possui alguma reserva ou empréstimos em vigor
+            st.execute( "SELECT \n" +
+                            "    COALESCE(l.usuariores, 0) AS ha_reserva,\n" +
+                            "    COALESCE(MAX(e.ativo),0) AS ha_emp\n" +
+                            "FROM\n" +
+                            "    livro l\n" +
+                            "LEFT JOIN\n" +
+                            "    emprestimo e ON e.codlivro = l.codlivro\n" +
+                            "WHERE\n" +
+                            "    l.codlivro = '" + livro.getCodlivro() + "';");
+
+            ResultSet rs = st.getResultSet();
+
+            int ha_reserva = 0, ha_emp = 0;
+            while(rs.next()){
+                ha_reserva = rs.getInt("ha_reserva");
+                ha_emp = rs.getInt("ha_emp");
+            }
+
+            //se possuir emprestimo ou reserva em vigor, a deleção é abortada
+            if(ha_reserva > 0){
+                return -1;
+            }
+
+            if(ha_emp > 0){
+                return -2;
+            }
 
             //executa a EXCLUSÃO LÓGICA do livro no banco de dados, ou seja, ativo recebe 0
             st.executeUpdate("UPDATE `bibliotec`.`livro` SET `ativo` = '0', dataalt = current_date(), disponibilidade = '0' WHERE (`codlivro` =" + livro.getCodlivro() + ");");
